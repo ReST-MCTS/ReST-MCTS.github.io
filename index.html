@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ReST-MCTS*: LLM Self-Training via Process Reward Guided Tree Search">
+  <meta name="keywords" content="LLM self-training, process reward model, tree search">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ReST-MCTS*: LLM Self-Training via Process Reward Guided Tree Search</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link rel="icon" href="./static/images/favicon_logosc/android-chrome-512x512.png">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://zhangdan0602.github.io/">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+
+        <!-- <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div> -->
+      </div>
+
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title"><strong>ReST-MCTS*</strong>: LLM Self-Training via Process Reward
+              Guided Tree Search
+            </h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://zhangdan0602.github.io/">Dan Zhang</a><sup style="color:#6fbf73;">1 </sup><sup
+                  style="color:#ffac33;">2 </sup><sup>*</sup></span>
+              <span class="author-block">
+                <a>Sining Zhoubian</a><sup style="color:#6fbf73">1 </sup><sup style="color:#ed4b82">3
+                </sup><sup>*</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://acbull.github.io/">Ziniu Hu</a><sup
+                  style="color:#ffac33;">2</sup>,</span>
+              <span class="author-block">
+                <a target="_blank" href="http://www.yisongyue.com/">Yisong Yue</a><sup style="color:#ffac33;">2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://keg.cs.tsinghua.edu.cn/yuxiao/">Yuxiao Dong</a><sup
+                  style="color:#6fbf73;">1</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://keg.cs.tsinghua.edu.cn/jietang/">Jie Tang</a><sup
+                  style="color:#6fbf73;">1</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup style="color:#6fbf73;">1</sup>The Knowledge Engineering Group (KEG),
+                Tsinghua University,</span>
+              <br>
+              <span class="author-block"><sup style="color:#ffac33;">2</sup>California Institute of Technology,</span>
+              <span class="author-block"><sup style="color:#ed4b82">3</sup>Zhipu AI</span>
+              <br>
+              <span class="author-block"><sup>*</sup>Equal Contribution</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/THUDM/ReST-MCTS"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Model Link. -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/zd21/ReST-MCTS"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <p style="font-size:18px">🤗</p>
+                    </span>
+                    <span>Model</span>
+                  </a>
+                </span>
+                <!-- Dataset Link. -->
+                <span class="link-block">
+                  <a href="" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fa fa-database"></i>
+                    </span>
+                    <span>Data</span>
+                  </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <section class="section">
+    <div class="container">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Recent methodologies in LLM self-training mostly rely on LLM generating responses and filtering those with
+              correct output answers as training data.
+              This approach often yields a low-quality fine-tuning training set (e.g., incorrect plans or intermediate
+              reasoning).
+            </p>
+            <p>
+              In this paper, we develop a reinforced self-training approach, called <strong>ReST-MCTS*</strong>, based
+              on integrating process reward guidance with tree search \searchModel for collecting higher-quality
+              reasoning traces as well as per-step value to train policy and reward models.
+              <strong>ReST-MCTS*</strong> circumvents the per-step manual annotation typically used to train process
+              rewards by tree-search-based reinforcement learning:
+              Given oracle final correct answers, <strong>ReST-MCTS*</strong> is able to infer the correct process
+              rewards by estimating the probability this step can help lead to the correct answer.
+              These inferred rewards serve dual purposes: they act as value targets for further refining the process
+              reward model and also facilitate the selection of high-quality traces for policy model self-training.
+            </p>
+            <p>
+              We first show that the tree-search policy in <strong>ReST-MCTS*</strong> achieves higher accuracy compared
+              with prior LLM reasoning baselines such as Best-of-N and Tree-of-Thought, within the same search budget.
+              We then show that by using traces searched by this tree-search policy as training data, we can
+              continuously enhance the three language models for multiple iterations, and outperform other self-training
+              algorithms such as ReST^EM and Self-Rewarding LM.
+              We release all code at <a
+                href="https://github.com/THUDM/ReST-MCTS">https://github.com/THUDM/ReST-MCTS</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+
+
+      <section class="section">
+        <div class="container">
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+              <h2 class="title is-3">Key Differences</em></strong></h2>
+              <div class="content has-text-justified">
+                <p style="text-align: center;">
+                  <img class="center-block org-banner" src="static/images/comparison.png" width="80%">
+                </p>
+                <p align="center">
+                  Table 1: Key differences between existing self-improvement methods and our approach. Train refers to
+                  whether to train a reward model.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <section class="section">
+        <div class="container">
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+              <h2 class="title is-3">Our Method: <strong>ReST-MCTS*</strong></h2>
+              <div class="content has-text-justified">
+                <p style="text-align: center;">
+                  <img class="center-block org-banner" src="static/images/overall.png" width="80%">
+                </p>
+                <p align="center">
+                  Figure 1: The left part presents the process of inferring process rewards and how we conduct process
+                  reward guide tree-search. The right part denotes the self-training of both the process reward model
+                  and
+                  the policy model.
+                </p>
+                <ul>
+                  <li>
+                    <strong>MCTS*</strong> which performs a tree search with sufficient rollout time under the guidance
+                    of the PRM.
+                  </li>
+                  <li> Process Reward Model (PRM) which evaluates any partial solution's quality and guides MCTS. </li>
+                  <li> Policy Model which generates multiple intermediate reasoning steps for each question. </li>
+                  <li> LLM Self-Training, which uses <strong>MCTS*</strong> to collect reasoning traces, trains policy
+                    model on positive samples, and trains process reward model on all generated traces.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Experimental Results</h2>
+          <div class="content has-text-justified">
+            <p>We validate <strong>ReST-MCTS*</strong> from three perspectives:</p>
+            <ul>
+              <li>
+                Self-Training approaches which use generated samples and evaluated for
+                multiple iterations, such as ReST^EM and Self-Rewarding, on in-distribution and out-of-distribution
+                benchmarks under three LLM backbones, as shown in Table 2. <strong>ReST-MCTS*</strong> outperforms
+                existing approaches in each iteration and continuously self-improves by data generated by itself.
+              </li>
+              <li>
+                Process Reward models which are compared with the state-of-the-art
+                techniques, such as MATH-SHEPHERD (MS) and SC + MS on GSM8K and MATH500, as shown in Table 3. Results
+                indicate <strong>ReST-MCTS*</strong> learns a good PRM and our reward model implements higher
+                accuracy.
+              </li>
+              <li>
+                Tree-Search Policy which are compared on college-level scientific reasoning
+                benchmark under three LLMs, such as CoT and ToT, as shown in Table 4. We also
+                evaluated under the same search budget on MATH and SciBench, such as SC and Best-of-N, as shown in
+                Figure 2.
+                Results show the <strong>ReST-MCTS*</strong> significantly outperforms other baselines despite
+                insufficient budget.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Self-training Results</h2>
+            <div class="content has-text-justified">
+              <p style="text-align: center;">
+                <a href="https://arxiv.org/abs/2401.07950" target="_blank" rel="external">
+                  <img class="center-block org-banner" src="static/images/results.png" width="80%"
+                    style="display: inline-block;">
+                </a>
+              </p>
+              <p align="center">
+                Table 2: Primary results by training both policy and value model for multiple iterations. For each
+                backbone, different self-training approaches are conducted separately. This means each approach has its
+                own generated train data and corresponding reward (value) model. Our evaluation is zero-shot only, the
+                few-shot baseline only serves as comparison.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Accuracy of Different Verifiers</h2>
+            <div class="content has-text-justified">
+              <p style="text-align: center;">
+                <a href="https://arxiv.org/abs/2401.07950" target="_blank" rel="external">
+                  <img class="center-block org-banner" src="static/images/vm_results.png" width="80%"
+                    style="display: inline-block;">
+                </a>
+              </p>
+              <p align="center">
+                Table 3: Accuracy of different verifiers on GSM8K test set and MATH500. SC: Self-Consistency, MS:
+                MATH-SHEPHERD. Verification is based on 256 outputs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Accuracy of Different Searches</h2>
+            <div class="content has-text-justified">
+              <p style="text-align: center;">
+                <a href="https://arxiv.org/abs/2401.07950" target="_blank" rel="external">
+                  <img class="center-block org-banner" src="static/images/searches.png" width="80%"
+                    style="display: inline-block;">
+                </a>
+              </p>
+              <p align="center">
+                Figure 2: Accuracy of different searches on MATH and SciBench with varied sampling budget.
+              </p>
+
+              <p style="text-align: center;">
+                <a href="https://arxiv.org/abs/2401.07950" target="_blank" rel="external">
+                  <img class="center-block org-banner" src="static/images/policies.png" width="80%"
+                    style="display: inline-block;">
+                </a>
+              </p>
+              <p align="center">
+                Table 4: Overall performance comparison with representative models on SciBench.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Detailed Inferred Examples using <strong>ReST-MCTS*</strong></h2>
+            <div class="content has-text-justified">
+              <p style="text-align: center;">
+                <a href="https://arxiv.org/abs/2401.07950" target="_blank" rel="external">
+                  <img class="center-block org-banner" src="static/images/infer.png" width="80%"
+                    style="display: inline-block;">
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </section>
+
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">Reference</h2>
+      <p>If you find our work helpful, please kindly cite our paper:</p>
+      <pre><code>@article{zhang2024sciglm,
+        title={Sciglm: Training scientific language models with self-reflective instruction annotation and tuning},
+        author={Zhang, Dan and Hu, Ziniu and Zhoubian, Sining and Du, Zhengxiao and Yang, Kaiyu and Wang, Zihan and Yue, Yisong and Dong, Yuxiao and Tang, Jie},
+        journal={arXiv preprint arXiv:2401.07950},
+        year={2024}
+      }</code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="./static/videos/nerfies_paper.pdf">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              This means you are free to borrow the <a href="https://github.com/nerfies/nerfies.github.io">source
+                code</a> of this website,
+              we just ask that you link back to this page in the footer.
+              Please remember to remove the analytics code included in the header of the website which
+              you do not want on your website.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
