@@ -99,9 +99,9 @@
                 <a>Sining Zhoubian</a><sup style="color:#6fbf73">1 </sup><sup style="color:#ed4b82">3
                 </sup><sup>*</sup>,
               </span>
-              <span class="author-block">
+              <!-- <span class="author-block">
                 <a target="_blank" href="https://acbull.github.io/">Ziniu Hu</a><sup
-                  style="color:#ffac33;">2</sup>,</span>
+                  style="color:#ffac33;">2</sup>,</span> -->
               <span class="author-block">
                 <a target="_blank" href="http://www.yisongyue.com/">Yisong Yue</a><sup style="color:#ffac33;">2</sup>,
               </span>
@@ -156,7 +156,7 @@
                 </span>
                 <!-- Model Link. -->
                 <span class="link-block">
-                  <a href="https://huggingface.co/zd21/ReST-MCTS"
+                  <a href="https://huggingface.co/zd21/ReST-MCTS-Llama3-8b-Instruct-Policy-1st"
                     class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <p style="font-size:18px">🤗</p>
@@ -166,12 +166,23 @@
                 </span>
                 <!-- Dataset Link. -->
                 <span class="link-block">
-                  <a href="" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://huggingface.co/datasets/zd21/ReST-MCTS-Llama3-8b-Instruct-Policy-1st" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fa fa-database"></i>
                     </span>
-                    <span>Data</span>
+                    <span>Policy Data</span>
                   </a>
+                </span>
+                <!-- Dataset Link. -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/datasets/zd21/ReST-MCTS-Llama3-8b-Instruct-PRM-1st" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fa fa-database"></i>
+                    </span>
+                    <span>PRM Data</span>
+                  </a>
+                </span>
+
               </div>
 
             </div>
@@ -199,7 +210,7 @@
             </p>
             <p>
               In this paper, we develop a reinforced self-training approach, called <strong>ReST-MCTS*</strong>, based
-              on integrating process reward guidance with tree search \searchModel for collecting higher-quality
+              on integrating process reward guidance with tree search MCTS* for collecting higher-quality
               reasoning traces as well as per-step value to train policy and reward models.
               <strong>ReST-MCTS*</strong> circumvents the per-step manual annotation typically used to train process
               rewards by tree-search-based reinforcement learning:
@@ -213,7 +224,7 @@
               with prior LLM reasoning baselines such as Best-of-N and Tree-of-Thought, within the same search budget.
               We then show that by using traces searched by this tree-search policy as training data, we can
               continuously enhance the three language models for multiple iterations, and outperform other self-training
-              algorithms such as ReST^EM and Self-Rewarding LM.
+              algorithms such as ReST<sup>EM</sup> and Self-Rewarding LM.
               We release all code at <a
                 href="https://github.com/THUDM/ReST-MCTS">https://github.com/THUDM/ReST-MCTS</a>.
             </p>
@@ -264,9 +275,9 @@
                     <strong>MCTS*</strong> which performs a tree search with sufficient rollout time under the guidance
                     of the PRM.
                   </li>
-                  <li> Process Reward Model (PRM) which evaluates any partial solution's quality and guides MCTS. </li>
-                  <li> Policy Model which generates multiple intermediate reasoning steps for each question. </li>
-                  <li> LLM Self-Training, which uses <strong>MCTS*</strong> to collect reasoning traces, trains policy
+                  <li> <strong>Process Reward Model (PRM)</strong> which evaluates any partial solution's quality and guides MCTS. </li>
+                  <li> <strong>Policy Model</strong> which generates multiple intermediate reasoning steps for each question. </li>
+                  <li> <strong>LLM Self-Training</strong>, which uses <strong>MCTS*</strong> to collect reasoning traces, trains policy
                     model on positive samples, and trains process reward model on all generated traces.</li>
                 </ul>
               </div>
