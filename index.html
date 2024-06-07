@@ -129,7 +129,7 @@
               <div class="publication-links">
                 <!-- PDF Link. -->
                 <span class="link-block">
-                  <a href="https://arxiv.org/pdf/" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://arxiv.org/pdf/2406.03816" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                     </span>
@@ -137,7 +137,7 @@
                   </a>
                 </span>
                 <span class="link-block">
-                  <a href="https://arxiv.org/abs/" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://arxiv.org/abs/2406.03816" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="ai ai-arxiv"></i>
                     </span>
@@ -166,7 +166,8 @@
                 </span>
                 <!-- Dataset Link. -->
                 <span class="link-block">
-                  <a href="https://huggingface.co/datasets/zd21/ReST-MCTS-Llama3-8b-Instruct-Policy-1st" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://huggingface.co/datasets/zd21/ReST-MCTS-Llama3-8b-Instruct-Policy-1st"
+                    class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fa fa-database"></i>
                     </span>
@@ -175,7 +176,8 @@
                 </span>
                 <!-- Dataset Link. -->
                 <span class="link-block">
-                  <a href="https://huggingface.co/datasets/zd21/ReST-MCTS-Llama3-8b-Instruct-PRM-1st" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://huggingface.co/datasets/zd21/ReST-MCTS-Llama3-8b-Instruct-PRM-1st"
+                    class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fa fa-database"></i>
                     </span>
@@ -275,9 +277,12 @@
                     <strong>MCTS*</strong> which performs a tree search with sufficient rollout time under the guidance
                     of the PRM.
                   </li>
-                  <li> <strong>Process Reward Model (PRM)</strong> which evaluates any partial solution's quality and guides MCTS. </li>
-                  <li> <strong>Policy Model</strong> which generates multiple intermediate reasoning steps for each question. </li>
-                  <li> <strong>LLM Self-Training</strong>, which uses <strong>MCTS*</strong> to collect reasoning traces, trains policy
+                  <li> <strong>Process Reward Model (PRM)</strong> which evaluates any partial solution's quality and
+                    guides MCTS. </li>
+                  <li> <strong>Policy Model</strong> which generates multiple intermediate reasoning steps for each
+                    question. </li>
+                  <li> <strong>LLM Self-Training</strong>, which uses <strong>MCTS*</strong> to collect reasoning
+                    traces, trains policy
                     model on positive samples, and trains process reward model on all generated traces.</li>
                 </ul>
               </div>
@@ -414,11 +419,13 @@
     <div class="container is-max-desktop content">
       <h2 class="title is-3 has-text-centered">Reference</h2>
       <p>If you find our work helpful, please kindly cite our paper:</p>
-      <pre><code>@article{zhang2024sciglm,
-        title={Sciglm: Training scientific language models with self-reflective instruction annotation and tuning},
-        author={Zhang, Dan and Hu, Ziniu and Zhoubian, Sining and Du, Zhengxiao and Yang, Kaiyu and Wang, Zihan and Yue, Yisong and Dong, Yuxiao and Tang, Jie},
-        journal={arXiv preprint arXiv:2401.07950},
-        year={2024}
+      <pre><code>@misc{zhang2024restmcts,
+        title={ReST-MCTS*: LLM Self-Training via Process Reward Guided Tree Search}, 
+        author={Dan Zhang and Sining Zhoubian and Yisong Yue and Yuxiao Dong and Jie Tang},
+        year={2024},
+        eprint={2406.03816},
+        archivePrefix={arXiv},
+        primaryClass={cs.CL}
       }</code></pre>
     </div>
   </section>
